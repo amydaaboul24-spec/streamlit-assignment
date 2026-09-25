@@ -46,35 +46,35 @@ road_columns = {
 selected_column = road_columns[road_type][road_condition]
 
 filtered_df = df[df[selected_column] == 1]
-road_data = pd.DataFrame({
-    "Road Type": ["Main Roads", "Secondary Roads", "Agricultural Roads"],
-    "Good": [
-        df["State of the main roads - good"].sum(),
-        df["State of the secondary roads - good"].sum(),
-        df["State of agricultural roads - good"].sum()
-    ],
-    "Acceptable": [
-        df["State of the main roads - acceptable"].sum(),
-        df["State of the secondary roads - acceptable"].sum(),
-        df["State of agricultural roads - acceptable"].sum()
-    ],
-    "Bad": [
-        df["State of the main roads - bad"].sum(),
-        df["State of the secondary roads - bad"].sum(),
-        df["State of agricultural roads - bad"].sum()
+# VISUALIZATION 1: Selected road condition
+selected_road_data = pd.DataFrame({
+    "Road Condition": ["Good", "Acceptable", "Bad"],
+    "Number of Towns": [
+        df[road_columns[road_type]["Good"]].sum(),
+        df[road_columns[road_type]["Acceptable"]].sum(),
+        df[road_columns[road_type]["Bad"]].sum()
     ]
 })
 
-heatmap_data = road_data.set_index("Road Type")
+fig1 = px.bar(
+    selected_road_data,
+    x="Road Condition",
+    y="Number of Towns",
+    title=f"Road Conditions for {road_type}",
+    text="Number of Towns"
+)
 
-fig1 = px.imshow(
-    heatmap_data,
-    text_auto=True,
-    labels=dict(x="Road Condition", y="Road Type", color="Number of Towns"),
-    title="Road Conditions Across Lebanese Towns"
+fig1.update_traces(
+    marker_line_width=[
+        3 if condition == road_condition else 0
+        for condition in selected_road_data["Road Condition"]
+    ]
 )
 
 st.plotly_chart(fig1, use_container_width=True)
+
+
+# VISUALIZATION 2: Transportation combinations
 filtered_df = filtered_df.copy()
 
 filtered_df["Transport Combination"] = filtered_df.apply(
@@ -95,7 +95,10 @@ transport_combinations = (
     .reset_index()
 )
 
-transport_combinations.columns = ["Transport Combination", "Number of Towns"]
+transport_combinations.columns = [
+    "Transport Combination",
+    "Number of Towns"
+]
 
 fig2 = px.scatter(
     transport_combinations,
