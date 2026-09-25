@@ -110,3 +110,43 @@ fig2 = px.scatter(
 )
 
 st.plotly_chart(fig2, use_container_width=True)
+# OPTIONAL TOWN EXPLORER
+st.subheader("Explore Matching Towns")
+
+st.write(
+    f"View the towns with **{road_condition.lower()} {road_type.lower()}** "
+    "and filter them by transportation mode."
+)
+
+transport_filter = st.selectbox(
+    "Filter towns by transportation:",
+    ["All", "Taxi", "Van", "Bus"]
+)
+
+town_results = filtered_df.copy()
+
+transport_columns = {
+    "Taxi": "The main means of public transport - taxis",
+    "Van": "The main means of public transport - vans",
+    "Bus": "The main means of public transport - buses"
+}
+
+if transport_filter != "All":
+    town_results = town_results[
+        town_results[transport_columns[transport_filter]] == 1
+    ]
+
+town_column = "Town"
+
+if town_column in town_results.columns:
+    towns = (
+        town_results[[town_column]]
+        .dropna()
+        .drop_duplicates()
+        .sort_values(town_column)
+    )
+
+    st.write(f"**{len(towns)} matching towns**")
+    st.dataframe(towns, use_container_width=True, hide_index=True)
+else:
+    st.warning("Town-name column could not be found in the dataset.")
