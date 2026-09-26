@@ -102,39 +102,54 @@ fig1.update_layout(
 st.plotly_chart(fig1, use_container_width=True)
 
 
-# VISUALIZATION 2: Transportation combinations
-filtered_df = filtered_df.copy()
+# VISUALIZATION 2: Transportation combinations across road conditions
 
-filtered_df["Transport Combination"] = filtered_df.apply(
-    lambda row: " + ".join([
-        mode for mode, column in {
-            "Taxi": "The main means of public transport - taxis",
-            "Van": "The main means of public transport - vans",
-            "Bus": "The main means of public transport - buses"
-        }.items()
-        if row[column] == 1
-    ]) or "None Reported",
-    axis=1
+combination_data = []
+
+for condition in ["Good", "Acceptable", "Bad"]:
+    condition_column = road_columns[road_type][condition]
+    condition_df = df[df[condition_column] == 1].copy()
+
+    condition_df["Transport Combination"] = condition_df.apply(
+        lambda row: " + ".join([
+            mode for mode, column in {
+                "Taxi": "The main means of public transport - taxis",
+                "Van": "The main means of public transport - vans",
+                "Bus": "The main means of public transport - buses"
+            }.items()
+            if row[column] == 1
+        ]) or "None Reported",
+        axis=1
+    )
+
+    counts = condition_df["Transport Combination"].value_counts()
+    total = len(condition_df)
+
+    for combination, count in counts.items():
+        combination_data.append({
+            "Road Condition": condition,
+            "Transport Combination": combination,
+            "Percentage of Towns": (count / total) * 100
+        })
+
+combination_df = pd.DataFrame(combination_data)
+
+fig2 = px.bar(
+    combination_df,
+    x="Transport Combination",
+    y="Percentage of Towns",
+    color="Road Condition",
+    barmode="group",
+    text_auto=".1f",
+    title=f"Transportation Combinations by {road_type} Condition",
+    category_orders={
+        "Road Condition": ["Good", "Acceptable", "Bad"]
+    }
 )
 
-transport_combinations = (
-    filtered_df["Transport Combination"]
-    .value_counts()
-    .reset_index()
-)
-
-transport_combinations.columns = [
-    "Transport Combination",
-    "Number of Towns"
-]
-
-fig2 = px.scatter(
-    transport_combinations,
-    x="Number of Towns",
-    y="Transport Combination",
-    size="Number of Towns",
-    title=f"Transportation Combinations in Towns with {road_condition} {road_type}",
-    labels={"Number of Towns": "Number of Towns"}
+fig2.update_layout(
+    xaxis_title="Transportation Combination",
+    yaxis_title="Percentage of Towns (%)"
 )
 
 st.plotly_chart(fig2, use_container_width=True)
