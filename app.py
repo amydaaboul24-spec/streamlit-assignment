@@ -18,11 +18,11 @@ st.write(
 st.markdown("""
 ### What does the data show?
 
-This dashboard explores how road conditions across Lebanese towns relate to patterns of public transportation.
+The data reveals two key patterns in how main-road conditions relate to public transportation across Lebanese towns:
 
-**Insight 1:** Poor road conditions become more common across road types. Bad-condition reports increase from **248 for main roads**, to **441 for secondary roads**, and **635 for agricultural roads**.
+**Insight 1: Vans become more common as main-road conditions worsen.** Van availability rises from **27.9% of towns with good main roads** to **37.1% with bad main roads**, while taxi availability decreases slightly from **88.5% to 82.7%**.
 
-**Insight 2:** **Taxis are the most commonly reported public transportation mode**, followed by vans and buses. Use the filters below to explore how transportation patterns differ by road type and condition.
+**Insight 2: Poorer main-road conditions are associated with a shift away from taxi-only transportation toward Taxi + Van combinations.** Taxi-only falls from **64.8% of towns with good main roads** to **57.7% with bad main roads**, while Taxi + Van rises from **12.3% to 17.3%**.
 """)
 st.subheader("Explore Road Conditions and Transportation")
 
