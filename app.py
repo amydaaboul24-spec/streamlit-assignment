@@ -55,29 +55,48 @@ road_columns = {
 selected_column = road_columns[road_type][road_condition]
 
 filtered_df = df[df[selected_column] == 1]
-# VISUALIZATION 1: Selected road condition
-selected_road_data = pd.DataFrame({
-    "Road Condition": ["Good", "Acceptable", "Bad"],
-    "Number of Towns": [
-        df[road_columns[road_type]["Good"]].sum(),
-        df[road_columns[road_type]["Acceptable"]].sum(),
-        df[road_columns[road_type]["Bad"]].sum()
-    ]
-})
+# VISUALIZATION 1: Transportation availability by road condition
+
+transport_columns = {
+    "Taxi": "The main means of public transport - taxis",
+    "Van": "The main means of public transport - vans",
+    "Bus": "The main means of public transport - buses"
+}
+
+visual1_data = []
+
+for condition in ["Good", "Acceptable", "Bad"]:
+    condition_column = road_columns[road_type][condition]
+    condition_df = df[df[condition_column] == 1]
+    
+    for mode, column in transport_columns.items():
+        percentage = condition_df[column].mean() * 100
+        
+        visual1_data.append({
+            "Road Condition": condition,
+            "Transportation Mode": mode,
+            "Availability (%)": percentage
+        })
+
+visual1_df = pd.DataFrame(visual1_data)
 
 fig1 = px.bar(
-    selected_road_data,
+    visual1_df,
     x="Road Condition",
-    y="Number of Towns",
-    title=f"Road Conditions for {road_type}",
-    text="Number of Towns"
+    y="Availability (%)",
+    color="Transportation Mode",
+    barmode="group",
+    text_auto=".1f",
+    title=f"Public Transportation Availability by {road_type} Condition",
+    category_orders={
+        "Road Condition": ["Good", "Acceptable", "Bad"],
+        "Transportation Mode": ["Taxi", "Van", "Bus"]
+    }
 )
 
-fig1.update_traces(
-    marker_line_width=[
-        3 if condition == road_condition else 0
-        for condition in selected_road_data["Road Condition"]
-    ]
+fig1.update_layout(
+    yaxis_title="Percentage of Towns (%)",
+    xaxis_title="Road Condition"
 )
 
 st.plotly_chart(fig1, use_container_width=True)
