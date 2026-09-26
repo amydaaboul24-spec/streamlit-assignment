@@ -15,6 +15,15 @@ st.write(
     "This interactive dashboard explores how road conditions in Lebanese towns "
     "relate to the availability of different public transportation modes."
 )
+st.markdown("""
+### What does the data show?
+
+This dashboard explores how road conditions across Lebanese towns relate to patterns of public transportation.
+
+**Insight 1:** Poor road conditions become more common across road types. Bad-condition reports increase from **248 for main roads**, to **441 for secondary roads**, and **635 for agricultural roads**.
+
+**Insight 2:** **Taxis are the most commonly reported public transportation mode**, followed by vans and buses. Use the filters below to explore how transportation patterns differ by road type and condition.
+""")
 st.subheader("Explore Road Conditions and Transportation")
 
 road_type = st.selectbox(
