@@ -136,20 +136,21 @@ combination_df = pd.DataFrame(combination_data)
 
 fig2 = px.bar(
     combination_df,
-    x="Transport Combination",
+    x="Road Condition",
     y="Percentage of Towns",
-    color="Road Condition",
-    barmode="group",
+    color="Transport Combination",
+    barmode="stack",
     text_auto=".1f",
-    title=f"Transportation Combinations by {road_type} Condition",
+    title=f"Transportation Mix by {road_type} Condition",
     category_orders={
         "Road Condition": ["Good", "Acceptable", "Bad"]
     }
 )
 
 fig2.update_layout(
-    xaxis_title="Transportation Combination",
-    yaxis_title="Percentage of Towns (%)"
+    xaxis_title="Road Condition",
+    yaxis_title="Percentage of Towns (%)",
+    legend_title="Transportation Combination"
 )
 
 st.plotly_chart(fig2, use_container_width=True)
