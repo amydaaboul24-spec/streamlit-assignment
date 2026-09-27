@@ -87,7 +87,7 @@ fig1 = px.line(
     color="Transportation Mode",
     markers=True,
     text="Availability (%)",
-    title=f"Public Transportation Availability by {road_type} Condition",
+    title=f"Transportation Availability by {road_type} Condition",
     category_orders={
         "Road Condition": ["Good", "Acceptable", "Bad"],
         "Transportation Mode": ["Taxi", "Van", "Bus"]
@@ -96,7 +96,9 @@ fig1 = px.line(
 
 fig1.update_traces(
     texttemplate="%{text:.1f}",
-    textposition="top center"
+    textposition="top center",
+    line=dict(width=3),
+    marker=dict(size=9)
 )
 
 fig1.update_layout(
