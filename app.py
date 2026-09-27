@@ -80,18 +80,23 @@ for condition in ["Good", "Acceptable", "Bad"]:
 
 visual1_df = pd.DataFrame(visual1_data)
 
-fig1 = px.bar(
+fig1 = px.line(
     visual1_df,
     x="Road Condition",
     y="Availability (%)",
     color="Transportation Mode",
-    barmode="group",
-    text_auto=".1f",
+    markers=True,
+    text="Availability (%)",
     title=f"Public Transportation Availability by {road_type} Condition",
     category_orders={
         "Road Condition": ["Good", "Acceptable", "Bad"],
         "Transportation Mode": ["Taxi", "Van", "Bus"]
     }
+)
+
+fig1.update_traces(
+    texttemplate="%{text:.1f}",
+    textposition="top center"
 )
 
 fig1.update_layout(
