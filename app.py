@@ -146,6 +146,7 @@ fig2 = px.bar(
     combination_counts,
     x="Transport Combination",
     y="Percentage of Towns",
+    color="Transport Combination",
     text_auto=".1f",
     title=f"Transportation Mix: {road_condition} {road_type}"
 )
