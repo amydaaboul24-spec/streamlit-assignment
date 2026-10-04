@@ -147,6 +147,15 @@ fig2 = px.bar(
     x="Transport Combination",
     y="Percentage of Towns",
     color="Transport Combination",
+    color_discrete_map={
+        "Taxi": "#0D6EFD",
+        "Taxi + Van": "#6EA8FE",
+        "Van": "#FF3333",
+        "Taxi + Van + Bus": "#FF9999",
+        "Bus": "#20A98B",
+        "Taxi + Bus": "#72DF8C",
+        "Van + Bus": "#FF7A00"
+    },
     text_auto=".1f",
     title=f"Transportation Mix: {road_condition} {road_type}"
 )
